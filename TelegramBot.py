@@ -1,10 +1,9 @@
 #Importent : Change the TOKEN if you made a new bot
 
 import logging
-import pytesseract
+#import pytesseract
 import requests
-import json
-import os
+
 import codecs
 
 
