@@ -117,7 +117,7 @@ def OCR_Convert(update, context):
     if y != 0:
         keyboard = [
             [
-                InlineKeyboardButton("Sinhala", callback_data='Sinhala'),
+                InlineKeyboardButton("Sinhala [beta]", callback_data='Sinhala'),
                 InlineKeyboardButton("Arabic", callback_data='ara'),
                 InlineKeyboardButton("Bulgarian", callback_data='bul'),
             ],
