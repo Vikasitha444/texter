@@ -192,6 +192,7 @@ def button(update, context):
             language = "Sinhala (සිංහල)"
             print("Yes")
             query.edit_message_text(text="Your langauge is: Sinhala (සිංහල)")
+            query.edit_message_text(text="This language doesn't available yet")
 
         if query.data == 'ara':
             language = "Arabic (العربية)"
