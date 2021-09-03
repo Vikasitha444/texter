@@ -14,6 +14,10 @@ from telegram import ParseMode
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import CallbackQueryHandler
 
+#pip install bs4
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
 
 # Enable logging
 logging.basicConfig(
@@ -107,7 +111,6 @@ def OCR_Convert(update, context):
                                   data=payload,
                                   )
             return r.content.decode()
-
     txt = ocr_space_file(filename='downloads.png')
     # print(type(txt))
     # print(txt)
@@ -1530,6 +1533,50 @@ def button(update, context):
 
 
 
+
+
+
+def log (update,context):
+    chat_id = update.message.chat_id
+
+    #version 1 log
+    context.bot.send_message(chat_id=chat_id,
+                                         text="Main version 1.0.0.0\n2021/08/25\n\n• Supports 20+ languages\n• working with any file format\n• Released only basic features\n• Added log update command\n\nUpdate 1.0.0.1\n2021/09/03\n\n• Fixed some bugs\n• Ability to check server statics\n• Ability to check server speed\n• Minor improvements",
+                                         parse_mode=ParseMode.HTML)
+
+
+
+
+
+
+def server (update,context):
+    chat_id = update.message.chat_id
+
+
+    url_to_scrape = "https://status.ocr.space/" #WEB SITE YOU WANNA SCRAP
+
+    requested_page = urlopen(url_to_scrape)
+    page_html = requested_page.read()
+    requested_page.close()
+
+    html_soup = BeautifulSoup(page_html,"html.parser")
+    scraped_data = html_soup.find_all('span', class_ = 'status {{ data.status }}') #SCRAPPED DATA IN A LIST
+
+
+    server_static = str(scraped_data[0].get_text())
+    server_speed = str(scraped_data[5].get_text())
+
+    print(server_static)
+    print(server_speed)
+
+    context.bot.send_message(chat_id=chat_id,
+                                         text= f"This bot is working by a server which we're maintaining daily. If <b>server is DOWN</b>, bot <b>won't work</b>  until it getting fixed.\n\n <i>This function updates every 5 min</i>\n\n <i>SERVER : </i> {server_static}\n <i>PING : </i> {server_speed}",
+                                         parse_mode=ParseMode.HTML)
+
+
+
+
+
 def main() -> None:
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
@@ -1546,6 +1593,8 @@ def main() -> None:
     dispatcher.add_handler(MessageHandler(Filters.forwarded & Filters.photo, OCR_Convert))
     dispatcher.add_handler(MessageHandler(Filters.photo, OCR_Convert))
     dispatcher.add_handler(CallbackQueryHandler(button))
+    dispatcher.add_handler(CommandHandler("log",log))
+    dispatcher.add_handler(CommandHandler("server",server))
 
 
     # Start the Bot
